@@ -1,0 +1,294 @@
+<!DOCTYPE html>
+<html lang="uk" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сміла — Статистичний портал міста</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js для графіків -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome для іконок -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'system-ui', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+        body { font-family: 'Inter', sans-serif; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(10px);
+        }
+    </style>
+</head>
+<body class="bg-gray-50 text-gray-800 antialiased flex flex-col min-h-screen">
+
+    <!-- Навігація -->
+    <nav class="fixed w-full z-50 transition-all duration-300 bg-white/90 backdrop-blur-md shadow-sm" id="navbar">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex justify-between h-16 items-center">
+                <div class="flex items-center gap-2">
+                    <i class="fas fa-chart-pie text-brand-600 text-2xl"></i>
+                    <span class="font-bold text-xl tracking-tight text-gray-900">Сміла<span class="text-brand-600">Stat</span></span>
+                </div>
+                <div class="hidden md:flex space-x-8">
+                    <a href="#home" class="text-gray-600 hover:text-brand-600 font-medium transition">Головна</a>
+                    <a href="#indicators" class="text-gray-600 hover:text-brand-600 font-medium transition">Показники</a>
+                    <a href="#demographics" class="text-gray-600 hover:text-brand-600 font-medium transition">Демографія</a>
+                    <a href="#about" class="text-gray-600 hover:text-brand-600 font-medium transition">Про місто</a>
+                </div>
+                <div class="md:hidden flex items-center">
+                    <button id="mobile-menu-btn" class="text-gray-600 hover:text-gray-900 focus:outline-none">
+                        <i class="fas fa-bars text-2xl"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+        <div id="mobile-menu" class="hidden md:hidden bg-white border-t border-gray-100 absolute w-full shadow-lg">
+            <div class="px-2 pt-2 pb-3 space-y-1 sm:px-3">
+                <a href="#home" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-gray-50 rounded-md">Головна</a>
+                <a href="#indicators" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-gray-50 rounded-md">Показники</a>
+                <a href="#demographics" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-gray-50 rounded-md">Демографія</a>
+                <a href="#about" class="block px-3 py-2 text-base font-medium text-gray-700 hover:text-brand-600 hover:bg-gray-50 rounded-md">Про місто</a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Головний екран (Hero Section) -->
+    <section id="home" class="pt-24 pb-12 md:pt-32 md:pb-20 bg-gradient-to-br from-brand-900 via-brand-700 to-indigo-800 text-white relative overflow-hidden">
+        <div class="absolute inset-0 opacity-20" style="background-image: radial-gradient(circle at 2px 2px, white 1px, transparent 0); background-size: 32px 32px;"></div>
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10 text-center">
+            <span class="inline-block py-1 px-3 rounded-full bg-white/20 text-brand-100 text-sm font-semibold mb-4 backdrop-blur-sm border border-white/30">
+                Черкаська область, Україна
+            </span>
+            <h1 class="text-4xl md:text-6xl font-extrabold tracking-tight mb-6">
+                Сміла у цифрах та фактах
+            </h1>
+            <p class="mt-4 max-w-2xl text-lg md:text-xl text-brand-100 mx-auto mb-10">
+                Актуальна статистика, демографічні дані та географічні відомості про місто Сміла станом на 2026 рік.
+            </p>
+            <div class="flex justify-center gap-4">
+                <a href="#indicators" class="bg-white text-brand-700 hover:bg-brand-50 font-semibold py-3 px-6 rounded-lg shadow-lg transition duration-200">
+                    Переглянути дані
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Ключові показники -->
+    <section id="indicators" class="py-16 bg-gray-50 -mt-10 relative z-20">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                
+                <div class="glass-card rounded-2xl p-6 shadow-xl border border-gray-100 hover:-translate-y-1 transition duration-300">
+                    <div class="w-12 h-12 inline-flex items-center justify-center rounded-xl bg-blue-100 text-blue-600 mb-4">
+                        <i class="fas fa-users text-xl"></i>
+                    </div>
+                    <h3 class="text-gray-500 text-sm font-medium uppercase tracking-wider mb-1">Населення (2026)</h3>
+                    <p class="text-3xl font-bold text-gray-900">~63 450 <span class="text-base font-normal text-gray-500">осіб</span></p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 shadow-xl border border-gray-100 hover:-translate-y-1 transition duration-300">
+                    <div class="w-12 h-12 inline-flex items-center justify-center rounded-xl bg-green-100 text-green-600 mb-4">
+                        <i class="fas fa-map text-xl"></i>
+                    </div>
+                    <h3 class="text-gray-500 text-sm font-medium uppercase tracking-wider mb-1">Площа міста</h3>
+                    <p class="text-3xl font-bold text-gray-900">39.85 <span class="text-base font-normal text-gray-500">км²</span></p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 shadow-xl border border-gray-100 hover:-translate-y-1 transition duration-300">
+                    <div class="w-12 h-12 inline-flex items-center justify-center rounded-xl bg-amber-100 text-amber-600 mb-4">
+                        <i class="fas fa-landmark text-xl"></i>
+                    </div>
+                    <h3 class="text-gray-500 text-sm font-medium uppercase tracking-wider mb-1">Рік заснування</h3>
+                    <p class="text-3xl font-bold text-gray-900">1542 <span class="text-base font-normal text-gray-500">рік</span></p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-6 shadow-xl border border-gray-100 hover:-translate-y-1 transition duration-300">
+                    <div class="w-12 h-12 inline-flex items-center justify-center rounded-xl bg-purple-100 text-purple-600 mb-4">
+                        <i class="fas fa-compress-arrows-alt text-xl"></i>
+                    </div>
+                    <h3 class="text-gray-500 text-sm font-medium uppercase tracking-wider mb-1">Густота населення</h3>
+                    <p class="text-3xl font-bold text-gray-900">1 592 <span class="text-base font-normal text-gray-500">осіб/км²</span></p>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <!-- Демографія -->
+    <section id="demographics" class="py-16 bg-white border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl font-bold text-gray-900 mb-4">Демографічна динаміка</h2>
+                <p class="text-gray-600 max-w-2xl mx-auto">Аналіз зміни чисельності населення міста Сміла за останні десятиліття на основі статистичних звітів.</p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-gray-50 rounded-2xl p-8 border border-gray-100 shadow-sm">
+                    <h3 class="text-lg font-semibold text-gray-800 mb-6 flex items-center gap-2">
+                        <i class="fas fa-chart-line text-brand-500"></i> Чисельність населення за роками
+                    </h3>
+                    <div class="relative h-80 w-full">
+                        <canvas id="populationChart"></canvas>
+                    </div>
+                    <p class="text-xs text-gray-400 mt-6 text-center">*Дані базуються на офіційних переписах та прогнозних оцінках.</p>
+                </div>
+            </div>
+
+            <!-- Додаткова статистика -->
+            <div class="mt-12 grid grid-cols-1 md:grid-cols-2 gap-6 max-w-4xl mx-auto">
+                <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm flex items-center justify-between">
+                    <div class="text-left">
+                        <div class="text-sm text-gray-500 uppercase font-semibold">Висота над рівнем моря</div>
+                        <div class="text-2xl font-bold text-brand-600">101 метр</div>
+                    </div>
+                    <i class="fas fa-mountain text-3xl text-gray-200"></i>
+                </div>
+                <div class="bg-white border border-gray-200 rounded-xl p-6 text-center shadow-sm flex items-center justify-between">
+                    <div class="text-left">
+                        <div class="text-sm text-gray-500 uppercase font-semibold">Водні ресурси</div>
+                        <div class="text-2xl font-bold text-brand-600">Тясмин та Сріблянка</div>
+                    </div>
+                    <i class="fas fa-tint text-3xl text-gray-200"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Про місто -->
+    <section id="about" class="py-16 bg-gray-50 border-t border-gray-100">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex flex-col lg:flex-row gap-12 items-center">
+                <div class="lg:w-1/2">
+                    <div class="bg-brand-900 rounded-2xl overflow-hidden shadow-2xl relative p-8 text-white">
+                        <div class="absolute inset-0 opacity-10 bg-[url('https://www.transparenttextures.com/patterns/cubes.png')]"></div>
+                        <i class="fas fa-train text-6xl text-brand-400 mb-6 opacity-80"></i>
+                        <h3 class="text-2xl font-bold mb-4">Транспортний вузол</h3>
+                        <p class="text-brand-100 mb-6 leading-relaxed">
+                            Сміла залишається стратегічним залізничним центром. Станція імені Тараса Шевченка є ключовою точкою для пасажирських та вантажних перевезень у центрі України.
+                        </p>
+                        <ul class="space-y-3">
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-green-400"></i> <span>Розвинена логістична мережа</span>
+                            </li>
+                            <li class="flex items-center gap-3">
+                                <i class="fas fa-check-circle text-green-400"></i> <span>Промисловий сектор (харчова та машинобудування)</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="lg:w-1/2">
+                    <h2 class="text-3xl font-bold text-gray-900 mb-6">Загальна інформація</h2>
+                    <div class="prose prose-blue text-gray-600">
+                        <p class="mb-4">
+                            Сміла — місто в Черкаському районі Черкаської області. Його географічне положення на Придніпровській височині та берегах річки Тясмин історично сприяло розвитку як промислового центру.
+                        </p>
+                        <p class="mb-4">
+                            Місто має глибоке коріння, пов'язане з розвитком цукрової промисловості в XIX столітті, що зробило його одним з найбільш технічно розвинених населених пунктів регіону на той час.
+                        </p>
+                        <p>
+                            На сьогоднішній день місто продовжує відігравати важливу роль в економіці області, попри демографічні виклики, характерні для більшості міст центральної України.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Футер -->
+    <footer class="bg-gray-900 text-white py-10 mt-auto">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center md:text-left">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center gap-2 mb-2 justify-center md:justify-start">
+                        <i class="fas fa-chart-pie text-brand-500 text-2xl"></i>
+                        <span class="font-bold text-xl tracking-tight">Сміла<span class="text-brand-500">Stat</span></span>
+                    </div>
+                    <p class="text-gray-400 text-sm">Дані оновлені станом на березень 2026 року.</p>
+                </div>
+                <div class="flex space-x-6">
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-facebook text-xl"></i></a>
+                    <a href="#" class="text-gray-400 hover:text-white transition"><i class="fab fa-telegram text-xl"></i></a>
+                </div>
+            </div>
+            <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-500 text-sm">
+                &copy; 2026 Сміла Статистика.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Мобільне меню
+        const btn = document.getElementById('mobile-menu-btn');
+        const menu = document.getElementById('mobile-menu');
+        btn.addEventListener('click', () => menu.classList.toggle('hidden'));
+
+        // Графік динаміки населення
+        const ctxPop = document.getElementById('populationChart').getContext('2d');
+        const gradientBlue = ctxPop.createLinearGradient(0, 0, 0, 300);
+        gradientBlue.addColorStop(0, 'rgba(59, 130, 246, 0.4)');
+        gradientBlue.addColorStop(1, 'rgba(59, 130, 246, 0.0)');
+
+        new Chart(ctxPop, {
+            type: 'line',
+            data: {
+                labels: ['1989', '2001', '2015', '2022', '2024', '2026'],
+                datasets: [{
+                    label: 'Населення',
+                    data: [77500, 69681, 68667, 65675, 64295, 63450],
+                    borderColor: '#3b82f6',
+                    backgroundColor: gradientBlue,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#ffffff',
+                    pointBorderColor: '#3b82f6',
+                    pointBorderWidth: 2,
+                    pointRadius: 5,
+                    fill: true,
+                    tension: 0.3
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        backgroundColor: '#111827',
+                        padding: 12,
+                        callbacks: {
+                            label: (c) => ` ${c.parsed.y.toLocaleString('uk-UA')} осіб`
+                        }
+                    }
+                },
+                scales: {
+                    y: {
+                        min: 60000,
+                        grid: { color: '#f3f4f6' }
+                    },
+                    x: { grid: { display: false } }
+                }
+            }
+        });
+    </script>
+</body>
+</html>
